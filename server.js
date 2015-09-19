@@ -1,14 +1,27 @@
-var http = require('http');
+var express = require('express');
+var app = express();
 
-http.createServer(function(req, res) {
-	console.log(req.method + " " + req.url);
-	if (req.url === '/') {
-		res.writeHead(200, {'Content-Type': 'text/plain'});
-		res.end('Hello World\n');
-	} else {
-		res.writeHead(404, {'Content-Type': 'text/plain'});
-		res.end('Page not found\n');
-	}
-}).listen(1337, "127.0.0.1");
+function root(req, res) {
+	res.setHeader("Content-Type", 'text/txt');
+	res.send('Hello world');
+}
 
-console.log('Server running at http://127.0.0.1:1337');
+function market(req, res) {
+	var id = req.params.id;
+
+	res.setHeader("Content-Type", 'text/html');
+	res.send('<html><body><h1>Welcome to Market ' + id + ' </h1><p>The best market site ever created!.</p></body></html>');
+}
+
+// Routes
+app.get('/', root);
+app.get('/market/:id', market);
+
+var server = app.listen(3000, '127.0.0.1', function() {
+	var host = server.address().address;
+	var port = server.address().port;
+	
+	console.log('Server running on:' + host + ":" + port);
+
+});
+
